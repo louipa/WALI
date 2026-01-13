@@ -203,6 +203,43 @@ x11test-clean:
 	cd x11test;
 	$(MAKE) clean
 
+kiloapp:
+	cd kilo;
+	$(WALI_CC) $(WALI_COMMON_CFLAGS) -D_DEFAULT_SOURCE -D_XOPEN_SOURCE=600 \
+		$(WALI_COMMON_LDFLAGS) -o kilo \
+		kilo.c;
+kiloapp-clean:
+	cd kilo;
+	$(MAKE) clean
+
+ch8:
+	cd Terminal-CHIP8;
+	$(WALI_CC) $(WALI_COMMON_CFLAGS) -D_DEFAULT_SOURCE -D_XOPEN_SOURCE=600 \
+		$(WALI_COMMON_LDFLAGS) -o main \
+		main.c;
+
+ch8-clean:
+	cd Terminal-CHIP8;
+	rm main;
+
+lighttpd:
+	cd lighttpd1.4; \
+	./autogen.sh; \
+	CC=$(WALI_CC) CFLAGS="$(WALI_COMMON_CFLAGS) -I$(WALI_SYSROOT_DIR)/include" \
+	LDFLAGS="$(WALI_COMMON_LDFLAGS) -L$(WALI_SYSROOT_DIR)/lib" \
+	LIGHTTPD_STATIC=yes ./configure --without-zlib --without-pcre2 --disable-shared;
+	$(MAKE);
+
+lighttpd-clean:
+	cd lighttpd1.4;
+	$(MAKE) clean;
+		
+
+echip8:
+	cd echip;
+	mkdir -p build;
+	$(WALI_CC) $(WALI_COMMON_CFLAGS) $(WALI_COMMON_LDFLAGS) -o build/echip8 src/echip.c src/vm.c src/graphics.c src/audio.c -lX11 -lasound 
+
 clean: sqlite-clean openssh-clean vim-clean mqtt-app-clean uvwasi-clean lua-clean memcached-clean bash-clean xorgproto-clean xcbproto-clean libxau-clean libxtrans-clean libxdmcp-clean libxcb-clean libX11-clean x11test-clean
 
 
